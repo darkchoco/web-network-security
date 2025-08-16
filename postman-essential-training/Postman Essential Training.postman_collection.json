@@ -1,0 +1,575 @@
+{
+	"info": {
+		"_postman_id": "4ad43632-afc8-4342-9b80-5d26ace422e9",
+		"name": "Postman Essential Training",
+		"description": "- [Contact List Documentation for LinkedIn Learning](https://documenter.getpostman.com/view/4012288/2s8YRiKDbu)\n    \n    - [https://documenter.getpostman.com/view/4012288/TzK2bEa8](https://documenter.getpostman.com/view/4012288/TzK2bEa8) 는 Heroku app에서 링크된 내용인데 위 내용과 같은 것 같다.\n        \n- [[LinkedIn] Postman Essential Training](http://redmine.cloudscape.kr/issues/946) (Redmine #946)\n    \n- Wiki 링크는 여기에.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "454173",
+		"_collection_link": "https://cloudscape-1298.postman.co/workspace/cloudscape~1a05f6b2-047e-4f46-8f57-8fa81bf6e43e/collection/454173-4ad43632-afc8-4342-9b80-5d26ace422e9?action=share&source=collection_link&creator=454173"
+	},
+	"item": [
+		{
+			"name": "Basic Endpoint Tests",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@abcde.com\",\r\n    \"password\": \"1234567\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://thinking-tester-contact-list.herokuapp.com/users/login",
+							"protocol": "https",
+							"host": [
+								"thinking-tester-contact-list",
+								"herokuapp",
+								"com"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						},
+						"description": "이를 먼저 실행해서 JWT를 받아야 한다."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response content type is application/json\", function () {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct content is returned\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"foo@bar.com\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contacts/{{contactId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set('contactId', jsonData._id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"birthdate\": \"2000-01-01\",\r\n    \"email\": \"foo@bar.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"birthdate\": \"1970-01-01\",\r\n    \"email\": \"jdoe@fake.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts/{{contactId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contact",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contacts/{{contactId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"{{contactId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Negative Tests",
+			"item": [
+				{
+					"name": "Get Contact List - Unauthorized",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contact - Not Found",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/contacts/67cef27032eaf700137a4d39",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"67cef27032eaf700137a4d39"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact - Missing required field",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Missing First Name error message is returned\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.errors.firstName).to.have.property(\"message\", \"Path `firstName` is required.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"\",\r\n    \"lastName\": \"Doe\",\r\n    \"birthdate\": \"1970-01-01\",\r\n    \"email\": \"jdoe@fake.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact - Last Name too long",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Bernd\",\r\n    \"lastName\": \"Ottovordemgentschenfelde\",\r\n    \"birthdate\": \"1970-01-01\",\r\n    \"email\": \"jdoe@fake.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Contact - Too young",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {\r",
+									"    pm.expect(pm.response.code).to.equal(400);\r",
+									"});\r",
+									"\r",
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Test for error message structure\r",
+									"pm.test(\"Response has expected error structure\", function () {\r",
+									"    pm.expect(response).to.have.property(\"errors\");\r",
+									"    pm.expect(response).to.have.property(\"_message\");\r",
+									"    pm.expect(response).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"// Test for specific error details in the response\r",
+									"pm.test(\"Error details for phone field are present\", function () {\r",
+									"    pm.expect(response.errors).to.have.property(\"phone\");\r",
+									"    const phoneError = response.errors.phone;\r",
+									"    pm.expect(phoneError).to.have.property(\"name\");\r",
+									"    pm.expect(phoneError).to.have.property(\"message\");\r",
+									"    pm.expect(phoneError).to.have.property(\"properties\");\r",
+									"});\r",
+									"\r",
+									"// Test for phone error properties\r",
+									"pm.test(\"Phone error properties are correctly defined\", function () {\r",
+									"    const phoneError = response.errors.phone.properties;\r",
+									"    pm.expect(phoneError).to.have.property(\"message\", \"Phone number is invalid\");\r",
+									"    pm.expect(phoneError).to.have.property(\"type\", \"user defined\");\r",
+									"    pm.expect(phoneError).to.have.property(\"path\", \"phone\");\r",
+									"    pm.expect(phoneError).to.have.property(\"value\", \"\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"杏奈\",\r\n    \"lastName\": \"加美\",\r\n    \"birthdate\": \"1996-09-01\",\r\n    \"email\": \"ka@yahoo.com\",\r\n    \"phone\": \"\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact - Invalid Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"John\",\r\n    \"lastName\": \"Doe\",\r\n    \"birthdate\": \"1970-01-01\",\r\n    \"email\": \"jdoe@@@@@fake.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contacts/67cf03b232eaf700137a57b1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contacts",
+								"67cf03b232eaf700137a57b1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"pm.test(\"Response time is less than 1500ms\", function () {\r",
+					"    pm.expect(pm.response.responseTime).to.be.below(1500);\r",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://thinking-tester-contact-list.herokuapp.com"
+		}
+	]
+}
