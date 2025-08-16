@@ -110,7 +110,18 @@
 								"exec": [
 									"pm.test(\"Correct content is returned\", function () {\r",
 									"    pm.expect(pm.response.text()).to.include(\"foo@bar.com\");\r",
-									"});"
+									"});\r",
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Correct first name is returned\", function () {\r",
+									"    pm.expect(jsonData.firstName).to.eql(environment.firstName);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Correct last name is returned\", function () {\r",
+									"    pm.expect(jsonData.lastName).to.eql(environment.lastName);\r",
+									"});\r",
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -538,6 +549,77 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Address API",
+			"item": [
+				{
+					"name": "Get Address",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correct city is returned\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.address.city).to.eql(\"Belmont\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://25536437-5c33-435a-a284-efd3f231bc7d.mock.pstmn.io/getAddress/1",
+							"protocol": "https",
+							"host": [
+								"25536437-5c33-435a-a284-efd3f231bc7d",
+								"mock",
+								"pstmn",
+								"io"
+							],
+							"path": [
+								"getAddress",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get Address",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://25536437-5c33-435a-a284-efd3f231bc7d.mock.pstmn.io/getAddress/1",
+									"protocol": "https",
+									"host": [
+										"25536437-5c33-435a-a284-efd3f231bc7d",
+										"mock",
+										"pstmn",
+										"io"
+									],
+									"path": [
+										"getAddress",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"businessId\": 1,\n    \"name\": \"Amalgamated Steel\",\n    \"address\": {\n        \"street\": \"123 Main St.\",\n        \"city\": \"Belmont\",\n        \"state\": \"MA\",\n        \"postalCode\": \"01734\"\n    }\n}"
+						}
+					]
 				}
 			]
 		}
