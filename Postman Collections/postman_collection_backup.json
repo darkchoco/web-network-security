@@ -231,6 +231,53 @@
 			"name": "Negative Tests",
 			"item": [
 				{
+					"name": "Setup - Add Contact",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "29da173e-38e7-4739-afbd-16b83de65606",
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set('contactId', jsonData._id);\r",
+									"\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"id": "b95c59a4-e866-453a-ad6f-e4dbf94a115f",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2NlZjIwZDMyZWFmNzAwMTM3YTRkMmEiLCJpYXQiOjE3NDE2MTY4NzB9.p9wOX9HKUG09Xf5zW6jeNTlip7k8bUYq42XqQ4bT_dM"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"{{firstName}}\",\r\n    \"lastName\": \"{{lastName}}\",\r\n    \"birthdate\": \"2000-01-01\",\r\n    \"email\": \"foo@bar.com\",\r\n    \"phone\": \"8005555555\",\r\n    \"street1\": \"1 Main St.\",\r\n    \"street2\": \"Apartment A\",\r\n    \"city\": \"Anytown\",\r\n    \"stateProvince\": \"KS\",\r\n    \"postalCode\": \"12345\",\r\n    \"country\": \"USA\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/contacts"
+					},
+					"response": []
+				},
+				{
 					"name": "Get Contact List - Unauthorized",
 					"id": "098f5140-a59c-4919-916e-de3f2b57e317",
 					"protocolProfileBehavior": {
@@ -456,7 +503,7 @@
 					"response": []
 				},
 				{
-					"name": "Delete Contact Copy",
+					"name": "Cleanup - Delete Contact",
 					"id": "13815e3b-4c8b-4882-a958-a7fb9ff5d162",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
