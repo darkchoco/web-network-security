@@ -91,7 +91,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "2b20aca8-370f-45e3-875f-b1b322c7ce69",
+								"id": "e8529f86-2a46-48b1-86e8-70dad3a61a13",
 								"exec": [
 									"pm.test(\"Correct content is returned\", function () {\r",
 									"    pm.expect(pm.response.text()).to.include(\"foo@bar.com\");\r",
